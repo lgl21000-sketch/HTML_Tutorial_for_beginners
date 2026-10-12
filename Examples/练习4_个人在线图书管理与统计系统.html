@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>个人在线图书管理与统计系统</title>
+        <style>
+            body{
+                background-color: #f0f2f5;
+                max-width: 800px;
+                text-align: center;
+                padding: 10px;
+                margin: 0 auto; /* 让整个 800px 容器居中 */
+            }
+            .panel{
+                border-radius: 8px;
+                border: 1px dashed black;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+                padding: 20px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            .env-panel_grid{
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .env-panel_c1{
+                width: 50%;
+                text-align: left;
+                padding-left: 50px;
+            }
+            .env-panel_c2{
+                width: 50%;
+                text-align: left;
+            }     
+            .member_level_cal{
+                display: flex;
+                gap: 30px;
+                padding-left: 50px;
+            }        
+            .classbutton{
+                background-color: #4f46e5;
+                color: white;
+                border-radius: 4px;
+                width: 220px;
+                border: none;
+                padding: 8px;
+                cursor: pointer;
+            }   
+            .classbutton:hover{
+                background-color: #3621f1;
+            }                   
+            .highlight{
+                color: #e11d48;
+                font-weight: bold; 
+            }     
+            .list_testbuttons{
+                display: flex;
+                gap: 30px;
+                padding-left: 50px;
+            }     
+            .booklist{
+                text-align: left;
+                text-decoration: underline;
+            }   
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>个人在线图书管理与统计系统</h1>
+            <p>掌握前端核心技术，管理你的数字书房</p>
+        </header>
+        <main>
+            <section id="env-panel" class="panel">
+                系统概览与环境面板
+                <div class="env-panel_grid">
+                    <p class="env-panel_c1">浏览器窗口: </p>
+                    <p class="env-panel_c2" id="window_size">width x height: </p>
+                    <p class="env-panel_c1">屏幕大小: </p>
+                    <p class="env-panel_c2" id="screen_size">width x height: </p>
+                    <p class="env-panel_c1">可用屏幕大小: </p>
+                    <p class="env-panel_c2" id="screen_avail_size">width x height: </p>
+                </div>                         
+            </section>
+            <section id="member-section" class="panel">
+                会员中心与逻辑测试区
+                <div class="member_level_cal">
+                    <input type="number" id="input_member_points" placeholder="enter your membership points">
+                    <button onclick="button_checklevel(this)" class="classbutton">计算会员等级</button>
+                </div>
+                <div>计算会员等级: <span id="member_level"></span></div>        
+            </section>     
+            <section id="book-section" class="panel">
+                图书列表与解构/拷贝演示区
+                <ul>
+                    <li id="book_01" class="booklist"></li>
+                    <li id="book_02" class="booklist"></li>
+                    <li id="book_03" class="booklist"></li>
+                </ul>
+                <div class="list_testbuttons">
+                    <button onclick="button_testarray(this)" class="classbutton">测试数组解构与剩余运算</button>
+                    <button onclick="button_testcopy(this)" class="classbutton">测试对象深浅拷贝</button>
+                    <button onclick="button_testproxy(this)" class="classbutton">测试 Proxy 代理作者名</button>
+                </div>
+                <div>输出结果展示面板: <span id="demo-result"></span></div>        
+            </section>                     
+            <section id="net-section" class="panel">
+                云端远程公告板 (Fetch 联网区)
+                <button onclick="button_fetchurl()" class="classbutton">获取最新云端公告</button>
+                <div>输出远程返回数据: <span id="fetchurl-result"></span></div>        
+            </section>  
+        </main>
+        <footer>
+            版权信息: 作者 <span id="author"></span> 年份 <span id="date"></span>
+        </footer>
+        <script>
+            const lib_name = "my_library";
+            let x_var = 50;
+
+            let books = [{"title":"JavaScript深入浅出","price":88},{"title":"HTML/CSS精粹","price":45},{"title":"前端工程化","price":95}];    
+            let book01 = document.querySelector("#book_01");
+            let book02 = document.querySelector("#book_02");
+            let book03 = document.querySelector("#book_03");
+            let [...book_Ele] = [book01, book02, book03];
+
+            // 修正 2：for 循环加上 let 声明变量 n
+            function list_books(books){
+                for(let n = 0; n < books.length; n++){
+                    book_Ele[n].innerHTML = "Title: " + books[n]["title"] + " Price: " + books[n]["price"];
+                } 
+            }
+            list_books(books);
+
+            let demo_res = document.getElementById("demo-result");
+
+            // 修正 1：改用传统 function 声明，确保能被 HTML 的 onclick 全局调用
+            function button_testarray(){
+                let [n1, n2] = [books[0]["price"], books[1]["price"]];
+                let y = n1 + n2;
+                demo_res.innerHTML = "testarray result (前两本书价格和): " + y;
+            }
+
+            let [book01_price, ...rest] = [books[0]["price"], books[1]["price"], books[2]["price"]];
+            console.log("第一本书价格（剩余运算测试）:", book01_price, rest);
+
+            function button_testcopy(){
+                let copybook = {...books[0]}; // 浅拷贝
+                let strbook01 = JSON.stringify(books[0]);
+                let deepcopy = JSON.parse(strbook01); // 深拷贝
+                copybook["price"] = 100;
+                deepcopy["price"] = 200;
+                demo_res.innerHTML = "copybook price: " + copybook["price"] + " | deepcopy price: " + deepcopy["price"] + " |原书 price: " + books[0]["price"];
+            }
+
+            let author = {firstName: "Alan", middleName: "Mathison", lastName: "Turing"}
+            let myproxy = new Proxy(
+                author, 
+                {
+                    get: function(target, property){
+                        if(property === "fullname"){
+                            return target.firstName + " " + target.middleName + " " + target.lastName;
+                        }
+                        return target[property];
+                    }
+                }
+            );
+
+            function button_testproxy(){
+                demo_res.innerHTML = "Proxy 代理全名: " + myproxy.fullname;
+            }
+
+            function button_checklevel(){
+                let Inp_Points = document.getElementById("input_member_points");
+                let Out_Level = document.getElementById("member_level");
+                let score = Number(Inp_Points.value);
+                
+                if(score > 500){
+                    Out_Level.innerHTML = "高级会员";
+                }else if(score > 100){
+                    Out_Level.innerHTML = "中级会员";
+                }else{
+                    Out_Level.innerHTML = "新手会员";
+                }
+            }
+
+            let WinSize_Ele = document.getElementById("window_size");
+            let ScreenSize_Ele = document.querySelector("#screen_size");
+            let ScreenAvailSize_Ele = document.querySelector("#screen_avail_size");
+            
+            let show_window_size = function(){
+                WinSize_Ele.innerHTML = window.innerWidth + "x" + window.innerHeight;
+                ScreenSize_Ele.innerHTML = window.screen.width + "x" + window.screen.height;
+                ScreenAvailSize_Ele.innerHTML = window.screen.availWidth + "x" + window.screen.availHeight;
+            }
+            show_window_size();
+            window.addEventListener("resize", show_window_size);
+
+            function button_fetchurl(){
+                let fetchedresult = document.querySelector("#fetchurl-result");
+                fetch("https://jsonplaceholder.typicode.com/posts/3").then(
+                    function(response){
+                        return response.json();
+                    }
+                ).then(
+                    function(data){
+                        fetchedresult.innerHTML = data["title"];
+                    }
+                ).catch(function(error){
+                    fetchedresult.innerHTML = "获取公告失败";
+                });
+            }
+
+            // 修正 3：动态渲染页脚的作者和年份
+            document.getElementById("author").innerHTML = "Alan";
+            document.getElementById("date").innerHTML = new Date().getFullYear();
+        </script>
+    </body>
+</html>

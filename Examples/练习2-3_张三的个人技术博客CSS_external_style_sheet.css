@@ -1,0 +1,17 @@
+header{background-color: #f4f4f4; border-bottom: 2px solid #ccc; padding: 15px; margin-bottom: 20px}
+            
+header a{text-decoration: none; color: #0066cc; font-weight: bold}
+            
+.asideclass{width: 250px; background-color: #eef6ff; padding: 10px; border: 1px dashed #99ccff}
+            
+aside li{color: #555555; font-size: 14px;}
+            
+#articleheading1{font-size: 24px; color: #333333; text-align: center}
+            
+#skills-table{text-decoration: line-through}
+            
+table{border-collapse: collapse; border: 3px solid black; margin-top: 15px;}
+            
+table tr th, table tr td{padding: 8px; border: 1px solid #ddd}
+            
+.displaytest{display: inline}

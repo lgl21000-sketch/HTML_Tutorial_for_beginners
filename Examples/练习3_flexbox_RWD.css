@@ -1,0 +1,59 @@
+.hero-section{
+    display:flex;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 1px solid cyan;    
+}
+
+.hero-card{
+    width:30%;
+    height: 120px;
+    border: 1px dashed gray;
+}
+
+.feature-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 1px solid cyan;
+}
+
+footer p br{
+    display: none;
+}
+
+.Mac{display:block}
+.iPad{display:none}
+.iPhone{display:none}
+
+@media(max-width:1200px){
+    .Mac{display:none}
+    .iPad{display:block}
+    .iPhone{display:none}
+}
+
+@media(max-width:800px){
+    .hero-section{
+        flex-wrap:wrap;
+    }
+    .hero-card{
+        width: 45%;
+    }
+    footer p br{
+        display: block;
+    }
+}
+
+@media(max-width:500px){
+    .Mac{display:none}
+    .iPad{display:none}
+    .iPhone{display:block}
+    .hero-card{width: 100%;}
+}
